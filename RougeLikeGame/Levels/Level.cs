@@ -1,6 +1,7 @@
 using RogueLib.Dungeon;
 using RogueLib.Engine;
 using RogueLib.Utilities;
+using SandBox01.Levels;
 using TileSet = System.Collections.Generic.HashSet<RogueLib.Utilities.Vector2>;
 
 namespace RlGameNS;
@@ -23,7 +24,7 @@ namespace RlGameNS;
 public class Level : Scene {
    // ---- level config ---- 
    protected string? _map;
-   protected int     _senseRadius = 4;
+   protected int     _senseRadius = 400;
 
    // --- Tile Sets -----
    // used to keep track of state of tiles on the map
@@ -35,6 +36,8 @@ public class Level : Scene {
 
    protected TileSet _discovered; // tiles the player has seen
    protected TileSet _inFov;      // current fov of player
+
+    protected List<Item> _items = [];
 
    public Level(Player p, string map, Game game) {
       if (game == null || p == null || map == null)
@@ -48,9 +51,23 @@ public class Level : Scene {
       initMapTileSets(map);
       updateDiscovered();
       registerCommandsWithScene();
+
+        spreadGold();
    }
 
-   protected void updateDiscovered() {
+    private void spreadGold()
+    {
+        var rng = new Random();
+        var am = rng.Next(10, 20);
+
+        for (int i = 0; i < am; i++)
+        {
+            var tile = _floor.ElementAt(rng.Next(_floor.Count));
+            _items.Add(new Gold(tile, rng.Next(100, 200)));
+        }
+    }
+
+    protected void updateDiscovered() {
       _inFov = fovCalc(_player!.Pos, _senseRadius);
 
       if (_discovered is null)
@@ -107,7 +124,13 @@ public class Level : Scene {
 
 // -------------------------------------------------------------------------
 
-   private void drawItems(IRenderWindow disp) { }
+   private void drawItems(IRenderWindow disp)
+    {
+        foreach(var item in _items)
+        {
+            disp.Draw(item.Glyph, item.Pos, ConsoleColor.Yellow);
+        }
+    }
 
    private void drawEnemies(IRenderWindow disp) { }
 
