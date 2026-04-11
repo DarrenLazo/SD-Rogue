@@ -19,6 +19,8 @@ public abstract class Player : IActor, IDrawable {
    
    public int Turn => _turn;
 
+    public int Gold { get => _gold; protected set => _gold = value; }
+
    public Player() {
       Name = "Rogue";
       Pos  = Vector2.Zero;
@@ -34,6 +36,10 @@ public abstract class Player : IActor, IDrawable {
       _turn++;
    }
 
+   public virtual void PickUpGold(int amount)
+    {
+        _gold += amount;
+    }
    public virtual void Draw(IRenderWindow disp) {
       disp.Draw(Glyph, Pos, _color);
    }

@@ -24,7 +24,7 @@ namespace RlGameNS;
 public class Level : Scene {
    // ---- level config ---- 
    protected string? _map;
-   protected int     _senseRadius = 400;
+   protected int     _senseRadius = 8;
 
    // --- Tile Sets -----
    // used to keep track of state of tiles on the map
@@ -38,6 +38,7 @@ public class Level : Scene {
    protected TileSet _inFov;      // current fov of player
 
     protected List<Item> _items = [];
+    protected List<Enemy> _enemies = [];
 
    public Level(Player p, string map, Game game) {
       if (game == null || p == null || map == null)
@@ -46,7 +47,7 @@ public class Level : Scene {
       _player     = p;
       _player.Pos = new Vector2(4, 12); // random, or at stairs
       _map        = map;
-      _game       = _game;
+      _game       = game;
 
       initMapTileSets(map);
       updateDiscovered();
@@ -82,9 +83,14 @@ public class Level : Scene {
    // -----------------------------------------------------------------------
    public override void Update() {
       _player!.Update();
-      // foreach item update
-      // foreach NPC update 
-      // check for player death -- on death build RIP message
+      foreach(var enemy in _enemies.ToList())
+        {
+            if (enemy.IsAlive)
+            {
+                enemy.Update();
+            }
+        }
+        _enemies.RemoveAll(e => !e.IsAlive);
    }
 
    public override void Draw(IRenderWindow? disp) {
@@ -128,11 +134,21 @@ public class Level : Scene {
     {
         foreach(var item in _items)
         {
-            disp.Draw(item.Glyph, item.Pos, ConsoleColor.Yellow);
+            if (_inFov.Contains(item.Pos))
+            {
+              disp.Draw(item.Glyph, item.Pos, ConsoleColor.Yellow);
+            }
+            
         }
     }
 
-   private void drawEnemies(IRenderWindow disp) { }
+   private void drawEnemies(IRenderWindow disp) 
+    {
+        foreach(var enemy in _enemies)
+        {
+            enemy.Draw(disp);
+        }
+    }
 
    private void initMapTileSets(string map) {
       var lines = map.Split('\n');
@@ -187,7 +203,7 @@ public class Level : Scene {
       RegisterCommand(ConsoleKey.S, "down");
       RegisterCommand(ConsoleKey.J, "down");
 
-      RegisterCommand(ConsoleKey.DownArrow, "left");
+      RegisterCommand(ConsoleKey.LeftArrow, "left");
       RegisterCommand(ConsoleKey.A, "left");
       RegisterCommand(ConsoleKey.H, "left");
 
@@ -208,9 +224,23 @@ public class Level : Scene {
          _walkables.Remove(newPos); // new tile is now occupied
          _walkables.Add(oldPos);    // old tile is now free
          updateDiscovered();
+
+            checkItemPickup(newPos);
       }
    }
 
+    private void checkItemPickup(Vector2 pos)
+    {
+        var item = _items.FirstOrDefault(i => i.Pos == pos);
+        
+        if(item is Gold gold)
+        {
+            _player!.PickUpGold(gold.Amount);
+
+            _items.Remove(gold);
+        }
+        
+    }
    public void QuitLevel() {
       _levelActive = false;
    }

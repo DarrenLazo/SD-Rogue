@@ -1,5 +1,11 @@
 namespace RogueLib.Dungeon;
 
-public class IActor {
-  char Glyph { get; }
+
+//Just changed the class to interface and added the update method
+public interface IActor
+{
+    char Glyph { get; }
+
+
+    void Update();
 }
