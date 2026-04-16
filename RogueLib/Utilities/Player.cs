@@ -63,6 +63,11 @@ public abstract class Player : IActor, IDrawable
     {
         _hp -= amount;
         _hp = 0;
+        if (_hp <= 0)
+        {
+            _hp = 0;
+            LogSystem.Log($"You died!"); // Log here
+        }
 
     }
 }
