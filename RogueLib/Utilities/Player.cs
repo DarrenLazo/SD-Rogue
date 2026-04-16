@@ -1,5 +1,6 @@
 using RogueLib.Dungeon;
 using RogueLib.Utilities;
+using SandBox01.Levels;
 
 public abstract class Player : IActor, IDrawable
 {
@@ -7,6 +8,8 @@ public abstract class Player : IActor, IDrawable
     public Vector2 Pos;
     public char Glyph => '@';
     public ConsoleColor _color = ConsoleColor.White;
+
+    private DeathScene deathScene = new DeathScene();
 
     protected int _level = 0;
     protected int _hp = 12;
@@ -66,7 +69,8 @@ public abstract class Player : IActor, IDrawable
         if (_hp <= 0)
         {
             _hp = 0;
-            LogSystem.Log($"You died!"); // Log here
+            Console.Clear();
+            Console.WriteLine(deathScene.Glyph);
         }
 
     }
