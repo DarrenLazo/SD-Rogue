@@ -1,11 +1,15 @@
 using RogueLib.Dungeon;
 using RogueLib.Utilities;
+using RogueLib.Engine;
+using SandBox01.Levels;
 
 public abstract class Player : IActor, IDrawable {
    public string       Name { get; set; }
    public Vector2      Pos;
    public char         Glyph => '@';
    public ConsoleColor _color = ConsoleColor.White;
+
+   private DeathScene deathScene = new DeathScene();
 
    protected int _level  = 0;
    protected int _hp     = 12;
@@ -37,4 +41,27 @@ public abstract class Player : IActor, IDrawable {
    public virtual void Draw(IRenderWindow disp) {
       disp.Draw(Glyph, Pos, _color);
    }
+
+    //// Player does damage to enemy, virtual maybe overittable for different class types? Warrior does 2x for ex?
+    //public virtual void Attack(Enemy enemy)
+    //{
+    //    int dmg = 1;
+    //    enemy.TakeDamage(dmg);
+    //    if (enemy.IsAlive)
+    //        LogSystem.Log($"You hit the {enemy.GetType().Name} for {dmg} damage!");
+    //}
+
+    // Player takes damage. Added in, doing it this way instead of Math.Max(0, Hp - amount);, looks more obv to me below.
+    public virtual void TakeDamage(int amount)
+    {
+        _hp -= amount;
+        if (_hp <= 0)
+        {
+            _hp = 0;
+            Console.Clear();
+            Console.WriteLine(deathScene.Glyph);
+            //deathScene.Draw();
+            //LogSystem.Log($"You died!"); // Log here }
+        }
+    }
 }

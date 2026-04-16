@@ -8,7 +8,7 @@ public abstract class Scene : ICommandable, IDrawable {
   // scenes must implement these services -------------------------
   public abstract void DoCommand(Command command);
   public abstract void Draw(IRenderWindow disp); // render the scene
-  public abstract void Update();                // update the scene
+  public abstract void Update();                 // update the scene
 
 
    // fields -------------------------------------------------------
