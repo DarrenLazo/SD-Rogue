@@ -15,6 +15,8 @@ public abstract class Item : IDrawable
         Glyph = c;
     }
 
+    public abstract void Use();
+
     public abstract void Draw(IRenderWindow disp);
 }
 
