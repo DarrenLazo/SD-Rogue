@@ -128,6 +128,12 @@ public class Level : Scene
 
     public override void Draw(IRenderWindow? disp)
     {
+        // Draw floor tiles ONLY if discovered or in FOV - FIXES ISSUES WITH ENEMIES AND ITEMS BEING EXPOSED -> Tunnels still show items though
+        foreach (var p in _floor)
+        {
+            if (_discovered.Contains(p) || _inFov.Contains(p))
+                disp.Draw('.', p, ConsoleColor.DarkGray);
+        }
         // using custom RenderWindow, cast to my RenderWindow
         var tilesToDraw = new TileSet(_decor);
         tilesToDraw.IntersectWith(_discovered);
