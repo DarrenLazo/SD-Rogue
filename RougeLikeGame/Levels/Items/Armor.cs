@@ -22,4 +22,9 @@ public class Armor : Item
     {
         disp.Draw(Glyph, Pos, ConsoleColor.Cyan);
     }
+
+    public override void Use()
+    {
+        
+    }
 }

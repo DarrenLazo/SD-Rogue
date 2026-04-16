@@ -20,4 +20,9 @@ public class HealingPotion : Item
     {
         disp.Draw(Glyph, Pos, ConsoleColor.Magenta);
     }
+
+    public override void Use()
+    {
+        
+    }
 }

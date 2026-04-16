@@ -20,4 +20,9 @@ internal class Gold : Item
     {
         disp.Draw(Glyph, Pos, Color);
     }
+
+    public override void Use()
+    {
+        
+    }
 }

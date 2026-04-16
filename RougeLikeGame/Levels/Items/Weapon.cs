@@ -21,4 +21,9 @@ public class Weapon : Item
     {
         disp.Draw(Glyph, Pos, ConsoleColor.Yellow);
     }
+
+    public override void Use()
+    {
+        
+    }
 }
