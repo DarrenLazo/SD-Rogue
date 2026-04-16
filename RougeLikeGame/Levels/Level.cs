@@ -32,10 +32,10 @@ public class Level : Scene
     // used to keep track of state of tiles on the map
     protected TileSet _walkables; // walkable tiles 
     protected TileSet _floor;
+    protected TileSet _exit; // exit tile
     protected TileSet _tunnel;
     protected TileSet _door;
     protected TileSet _decor; // walls and other decorations, always visible once discovered
-
     protected TileSet _discovered; // tiles the player has seen
     protected TileSet _inFov;      // current fov of player
 
@@ -218,16 +218,18 @@ public class Level : Scene
         _tunnel = new TileSet();
         _door = new TileSet();
         _decor = new TileSet();
+        _exit = new TileSet();
 
         foreach (var (c, p) in Vector2.Parse(map))
         {
             if (c == '.') _floor.Add(p);
             else if (c == '+') _door.Add(p);
             else if (c == '#') _tunnel.Add(p);
+            else if (c == 'E') _exit.Add(p);
             else if (c != ' ') _decor.Add(p);
         }
 
-        _walkables = _floor.Union(_tunnel).Union(_door).ToHashSet();
+        _walkables = _floor.Union(_tunnel).Union(_door).Union(_exit).ToHashSet();
 
         //      for (int row = 0; row < lines.Length; ++row) {
         //         for (int col = 0; col < lines[row].Length; ++col) {
@@ -282,6 +284,7 @@ public class Level : Scene
             return; // do NOT move into the enemy tile
         }
 
+        
         // 2. Normal movement
         if (_walkables.Contains(newPos))
         {
@@ -292,6 +295,15 @@ public class Level : Scene
             updateDiscovered();
 
             checkItemPickup(newPos);
+
+            //Checking to see if Player is trying to walk into the exit
+                if (_exit.Contains(newPos))
+                {
+                    Console.WriteLine("You found the exit!!");
+                    Console.WriteLine("Moving to the next map....");
+                    _levelActive = false;// if the player reaches the exit the level is no longer active
+                }
+            
         }
     }
 

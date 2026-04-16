@@ -10,6 +10,7 @@ public abstract class Player : IActor, IDrawable
 
     protected int _level = 0;
     protected int _hp = 12;
+    public bool isAlive => _hp > 0;
     protected int _str = 16;
     protected int _arm = 4;
     protected int _exp = 0;
@@ -36,7 +37,7 @@ public abstract class Player : IActor, IDrawable
 
     public virtual void Update()
     {
-        _turn++;
+      _turn++;
     }
 
     public virtual void PickUpGold(int amount)
@@ -61,7 +62,7 @@ public abstract class Player : IActor, IDrawable
     public virtual void TakeDamage(int amount)
     {
         _hp -= amount;
-        if (_hp <= 0)
-            _hp = 0; 
+        _hp = 0;
+
     }
 }
