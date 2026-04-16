@@ -1,46 +1,64 @@
 using RogueLib.Dungeon;
 using RogueLib.Utilities;
 
-public abstract class Player : IActor, IDrawable {
-   public string       Name { get; set; }
-   public Vector2      Pos;
-   public char         Glyph => '@';
-   public ConsoleColor _color = ConsoleColor.White;
+public abstract class Player : IActor, IDrawable
+{
+    public string Name { get; set; }
+    public Vector2 Pos;
+    public char Glyph => '@';
+    public ConsoleColor _color = ConsoleColor.White;
 
-   protected int _level  = 0;
-   protected int _hp     = 12;
-   protected int _str    = 16;
-   protected int _arm    = 4;
-   protected int _exp    = 0;
-   protected int _gold   = 0;
-   protected int _maxHp  = 12;
-   protected int _maxStr = 16;
-   protected int _turn   = 0;
-   
-   public int Turn => _turn;
+    protected int _level = 0;
+    protected int _hp = 12;
+    protected int _str = 16;
+    protected int _arm = 4;
+    protected int _exp = 0;
+    protected int _gold = 0;
+    protected int _maxHp = 12;
+    protected int _maxStr = 16;
+    protected int _turn = 0;
+
+    public int Turn => _turn;
 
     public int Gold { get => _gold; protected set => _gold = value; }
 
-   public Player() {
-      Name = "Rogue";
-      Pos  = Vector2.Zero;
-   }
+    public Player()
+    {
+        Name = "Rogue";
+        Pos = Vector2.Zero;
+    }
 
-   public string HUD =>
-      $"Level:{_level}  Gold: {_gold}    Hp: {_hp}({_maxHp})" +
-      $"  Str: {_str}({_maxStr})" +
-      $"  Arm: {_arm}   Exp: {_exp}/{10} Turn: {_turn}";
+    public string HUD =>
+       $"Level:{_level}  Gold: {_gold}    Hp: {_hp}({_maxHp})" +
+       $"  Str: {_str}({_maxStr})" +
+       $"  Arm: {_arm}   Exp: {_exp}/{10} Turn: {_turn}";
 
 
-   public virtual void Update() {
-      _turn++;
-   }
+    public virtual void Update()
+    {
+        _turn++;
+    }
 
-   public virtual void PickUpGold(int amount)
+    public virtual void PickUpGold(int amount)
     {
         _gold += amount;
     }
-   public virtual void Draw(IRenderWindow disp) {
-      disp.Draw(Glyph, Pos, _color);
-   }
+    public virtual void Draw(IRenderWindow disp)
+    {
+        disp.Draw(Glyph, Pos, _color);
+    }
+
+    // Player does damage to enemy, virtual maybe overittable for different class types? Warrior does 2x for ex?
+    public virtual void Attack(Enemy enemy)
+    {
+        enemy.TakeDamage(1);
+    }
+
+    // Player takes damage. Added in, doing it this way instead of Math.Max(0, Hp - amount);, looks more obv to me below.
+    public virtual void TakeDamage(int amount)
+    {
+        _hp -= amount;
+        if (_hp <= 0)
+            _hp = 0; 
+    }
 }
