@@ -1,7 +1,7 @@
 ﻿using RogueLib.Dungeon;
 using Vector2 = RogueLib.Utilities.Vector2;
 
-namespace SandBox01.Levels
+namespace SandBox01.Levels.Enemies
 {
     internal class Goblin : Enemy
     {

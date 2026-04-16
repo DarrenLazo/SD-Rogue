@@ -2,20 +2,21 @@
 using Vector2 = RogueLib.Utilities.Vector2;
 
 
-namespace SandBox01.Levels
+namespace SandBox01.Levels.Enemies
 {
-    internal class Orc : Enemy
+    internal class Troll : Enemy
     {
         // removed it and used protected at Enemy class for convenience.
         //private Player _player;
         private int _turnCounter = 0;
 
-        // passing in ConsoleColor.Red? I removed that for now.
-        public Orc(Vector2 pos, Player player) : base('o', pos, hp: 12)
+        // passing in ConsoleColor.Magenta? I removed that for now.
+        public Troll(Vector2 pos, Player player) : base('T', pos, hp: 20)
         {
             _player = player;
-            Color = ConsoleColor.Red;
+            Color = ConsoleColor.Magenta;
         }
+
         public override void Update()
         {
             if (!IsAlive) return;
@@ -28,7 +29,7 @@ namespace SandBox01.Levels
             }
 
             _turnCounter++;
-            if (_turnCounter % 2 != 0) return;
+            if (_turnCounter % 3 != 0) return;
 
             int dx = (_player.Pos.X > Pos.X) ? 1 : (_player.Pos.X < Pos.X ? -1 : 0);
             int dy = (_player.Pos.Y > Pos.Y) ? 1 : (_player.Pos.Y < Pos.Y ? -1 : 0);
@@ -39,7 +40,5 @@ namespace SandBox01.Levels
                 Pos = newPos;
             }
         }
-
-
     }
 }

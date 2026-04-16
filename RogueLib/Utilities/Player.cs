@@ -17,7 +17,7 @@ public abstract class Player : IActor, IDrawable
     protected int _maxHp = 12;
     protected int _maxStr = 16;
     protected int _turn = 0;
-
+    
     public int Turn => _turn;
 
     public int Gold { get => _gold; protected set => _gold = value; }
@@ -51,7 +51,10 @@ public abstract class Player : IActor, IDrawable
     // Player does damage to enemy, virtual maybe overittable for different class types? Warrior does 2x for ex?
     public virtual void Attack(Enemy enemy)
     {
-        enemy.TakeDamage(1);
+        int dmg = 1;
+        enemy.TakeDamage(dmg);
+        if (enemy.IsAlive)
+            LogSystem.Log($"You hit the {enemy.GetType().Name} for {dmg} damage!");
     }
 
     // Player takes damage. Added in, doing it this way instead of Math.Max(0, Hp - amount);, looks more obv to me below.

@@ -1,7 +1,8 @@
 using RogueLib.Dungeon;
 using RogueLib.Engine;
 using RogueLib.Utilities;
-using SandBox01.Levels;
+using SandBox01.Levels.Enemies;
+using SandBox01.Levels.Items;
 using TileSet = System.Collections.Generic.HashSet<RogueLib.Utilities.Vector2>;
 
 namespace RlGameNS;
@@ -60,8 +61,14 @@ public class Level : Scene
         // Simple adding of enemies FOR NOW.
  
         _enemies.Add(new Orc(new Vector2(40, 12), _player));
-        _enemies.Add(new Troll(new Vector2(55, 15), _player));
+        _enemies.Add(new Troll(new Vector2(55, 12), _player));
         _enemies.Add(new Goblin(new Vector2(20, 10), _player)); // 20 , 10
+
+        // Simple adding of items FOR NOW.
+
+        _items.Add(new Weapon("Dagger", 1, new Vector2(10, 5)));
+        _items.Add(new Armor("Leather Armor", 1, new Vector2(12, 7)));
+        _items.Add(new HealingPotion(5, new Vector2(4, 10)));
 
         // it can only walk if it is in any _walkable tiles.
         foreach (var e in _enemies)
@@ -136,7 +143,9 @@ public class Level : Scene
 
         drawItems(disp);
         drawEnemies(disp);
-        disp.Draw(_player.HUD, new Vector2(0, 24), ConsoleColor.Green);
+        disp.Draw(_player.HUD, new Vector2(0, 23), ConsoleColor.Green);
+        disp.Draw(new string(' ', 78), new Vector2(0, 24), ConsoleColor.White); // The only way so far that I can clear the log messages -> If I dont do this, log messages will retain some messages so msg ex: 'The Goblin dies! in for 1 damage!'
+        disp.Draw(LogSystem.Message, new Vector2(0, 24), ConsoleColor.White); // Log message here
     }
 
     public override void DoCommand(Command command)
@@ -283,12 +292,33 @@ public class Level : Scene
     private void checkItemPickup(Vector2 pos)
     {
         var item = _items.FirstOrDefault(i => i.Pos == pos);
+        if (item == null) return; // We switched to switch statment : if (item is Gold gold) was the old null safety check.
 
-        if (item is Gold gold)
+        switch (item)
         {
-            _player!.PickUpGold(gold.Amount);
+            case Gold gold:
+                _player!.PickUpGold(gold.Amount);
+                LogSystem.Log($"You pick up {gold.Amount} gold.");
+                _items.Remove(item);
+                break;
 
-            _items.Remove(gold);
+            case HealingPotion potion:
+                // Inventory stuff add here!
+                LogSystem.Log("You pick up a healing potion.");
+                _items.Remove(item);
+                break;
+
+            case Weapon weapon:
+                // Inventory stuff add here!
+                LogSystem.Log($"You pick up a {weapon.Name}.");
+                _items.Remove(item);
+                break;
+
+            case Armor armor:
+                // Inventory stuff add here!
+                LogSystem.Log($"You pick up {armor.Name}.");
+                _items.Remove(item);
+                break;
         }
 
     }

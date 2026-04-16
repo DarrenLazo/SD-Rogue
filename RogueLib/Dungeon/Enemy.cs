@@ -44,6 +44,12 @@ namespace RogueLib.Dungeon
         public virtual void TakeDamage(int amount)
         {
             Hp = Math.Max(0, Hp - amount);
+
+            if (Hp <= 0)
+            {
+                Hp = 0;
+                LogSystem.Log($"The {GetType().Name} dies!"); // Log here
+            }
         }
 
 
@@ -62,7 +68,9 @@ namespace RogueLib.Dungeon
 
         protected virtual void AttackPlayer()
         {
-            _player.TakeDamage(1);
+            int dmg = 1;
+            _player.TakeDamage(dmg);
+            //LogSystem.Log($"The {this.GetType().Name} hits you for {dmg} damage."); // would have to prob multiline
         }
     }
 

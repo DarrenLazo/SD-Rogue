@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace SandBox01.Levels;
+namespace SandBox01.Levels.Items;
 
 internal class Gold : Item
 {
