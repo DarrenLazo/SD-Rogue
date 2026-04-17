@@ -8,6 +8,7 @@ public abstract class Item : IDrawable
 {
     public Vector2 Pos { get; set; }
     public char Glyph { get; init; }
+    public abstract string Name { get; }
 
     public Item (char c, Vector2 pos)
     {

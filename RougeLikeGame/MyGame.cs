@@ -6,37 +6,44 @@ namespace RlGameNS;
 
 
 public class MyGame : Game {
-   
-   private void init() {
-      // To create a new game just need to 
-      // 'inject' an IRenderWindow to draw the game one
-      // 'inject' a Player, the player lives outside or the Scene's because the 
-      // player visits all the scenes and takes their inventory with them. 
-      // you must load the first leveel, and your level or your game must manage 
-      // the level switching. 
-      
+    public List<string> maps = new List<string>();
+
+
+    private void init() {
+        // To create a new game just need to 
+        // 'inject' an IRenderWindow to draw the game one
+        // 'inject' a Player, the player lives outside or the Scene's because the 
+        // player visits all the scenes and takes their inventory with them. 
+        // you must load the first leveel, and your level or your game must manage 
+        // the level switching. 
+
       _window       = new ScreenBuff();
       _player       = new Rogue();
-      _currentLevel = new Level(_player, map1, this);
-      
-   }
+      _currentLevel = new Level(_player, maps, this);
 
-   public MyGame() {
-      // init level on construction 
-      init();
-   }
 
-   
-   // ----------------------------------------------------------------
-   // string to use as the backgound on our first level
-   // ----------------------------------------------------------------
+    }
 
-   public const string map1 =
+    public MyGame() {
+        maps.Add(map1);
+        maps.Add(map2);
+        maps.Add(map3);
+        // init level on construction 
+        init();
+    }
+
+
+    // ----------------------------------------------------------------
+    // string to use as the backgound on our first level
+    // ----------------------------------------------------------------
+
+
+    public const string map1 =
       """
 
                ┌──────┐          ┌─────────────┐
                │......│        ##+.............│            ┌───────┐
-               │......│        # │.............+##          │.......│
+               │......│        # │.............+##          │.....E.│
                │......+######### └──────────+──┘ ###########+.......│
                │......│                     #               └───────┘
                └──+───┘                     #
@@ -56,6 +63,54 @@ public class MyGame : Game {
              #             # |.......................+####
              #             # └───────────────────────┘
              ###############
+             
+             
+      """;
+
+    public const string map2 =
+     """
+
+      ┌──────────┐          ┌────────────┐
+      │..........│          │............│               ┌──────────┐
+      │..........+##        │............│               │..........│
+      │..........│ #        │............+###############+..........│
+      │..........│ #########+............│               │..........│
+      └────+─────┘          └────────────┘               └────+─────┘
+           #                                                  #
+           #                      #############################
+      ┌────+───────┐   ┌──────────+───────────────-─────────────────┐
+      │............│   │............................................│
+      │............│   │............................................│
+      │............│   │............................................│
+      └────────────┘   └──────────────────────────────────────────+─┘
+                                                                  #
+                                          ┌─────────────────────┐ #
+                                          │...E.................+##
+                                          │.....................│
+                                          │.....................│
+                                          └─────────────────────┘
+             
+             
+      """;
+
+    public const string map3 =
+       """
+       ┌─────────────────────────────────────────────────────────┐
+       │.........................................................│
+       │.........................................................│
+       │.........................................................│
+       │.........................................................│
+       │.........................................................│
+       │.........................................................│
+       └───────+───────────────────────────────────────────────+─┘
+               #                                               #
+          ┌────+──┐                                     ┌──────+─────┐
+          │.......│                                     │............│
+          │.......│                                     │............│
+          │.......│                                     │............│
+          │.......+#####################################+............│
+          │.......│                                     └────────────┘
+          └───────┘
              
              
       """;

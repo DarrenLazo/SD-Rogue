@@ -22,6 +22,9 @@ public class Game {
    protected IRenderWindow? _window;
    protected Player?        _player;
 
+   public Player? Player => _player;
+   public bool IsPlayerAlive => _player?.isAlive ?? false;
+
    public Game() {
       _isQuit = false;
    }
@@ -47,11 +50,17 @@ public class Game {
          // update the level
          // ----------------- 
          _currentLevel!.Update();
+
+         if (!IsPlayerAlive)
+            break;
       }
    }
 
 
    protected virtual void HandleUserInput() {
+      if (!IsPlayerAlive)
+         return;
+
       ConsoleKeyInfo key = Console.ReadKey(true);
       if (_currentLevel!.HasCommand(key.Key))
          _currentLevel!.DoCommand(new Command(_currentLevel!.GetCommand(key.Key)));

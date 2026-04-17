@@ -25,12 +25,12 @@ public static class DungeonConfig {
   //   "|", "-", and any other chars - walls, not walkable, not transparent,
   //              but discoverable. 
 
-  public const string map1 =
+  public const string map =
       """
 
                ┌──────┐          ┌─────────────┐
                │......│        ##+.............│            ┌───────┐
-               │......│        # │.............+##          │.......│
+               │......│        # │.............+##          │.....E.│
                │......+######### └──────────+──┘ ###########+.......│
                │......│                     #               └───────┘
                └──+───┘                     #

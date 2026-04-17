@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using RogueLib.Dungeon;
+﻿using RogueLib.Dungeon;
 using RogueLib.Utilities;
 
 namespace SandBox01.Levels;
@@ -12,16 +9,21 @@ internal static class Inventory
 
     public static Item GetItem(int index) => ItemsInInventory[index];
 
-    public static void AddItem(Player player, Item item) => ItemsInInventory.Add(item);
+    public static void AddItem(Item item) => ItemsInInventory.Add(item);
 
     public static void UseItem(Item item) => item.Use();
 
     // NEEDS WORK //
-    public static void DropItem(Item item) 
+    public static void Open()
     {
-        if(ItemsInInventory.Contains(item))
+        if (ItemsInInventory.Count == 0)
+            return;
+
+        foreach(Item i in ItemsInInventory)
         {
-            ItemsInInventory.Remove(item);
+            Console.WriteLine($"{i.Name}");
         }
     }
+
+
 }

@@ -32,7 +32,7 @@ public class ScreenBuff : IRenderWindow {
 
    public int Width  => _width;
    public int Height => _height;
-
+    
    // ----------- ctor and public methods ----------------
    public ScreenBuff(int width = 78, int height = 25) {
       _width      = width;
@@ -41,6 +41,7 @@ public class ScreenBuff : IRenderWindow {
       _front      = new char[_width, _height];
       _backColor  = new ConsoleColor[_width, _height];
       _frontColor = new ConsoleColor[_width, _height];
+      ResetBack();
       ResetFront();
    }
 
@@ -89,8 +90,22 @@ public class ScreenBuff : IRenderWindow {
       }
    }
 
+    protected void ResetBack()
+    {
+     var fgColor = Console.ForegroundColor;
 
-   protected void BuildOffsetFrame(string     s, Vector2 offset, ConsoleColor color = _notAColor,
+    for (int y = 0; y < _height; y++)
+     {
+       for (int x = 0; x < _width; x++)
+        {
+         _back[x, y] = ' ';
+         _backColor[x, y] = fgColor;
+            }
+        }
+    }
+
+
+    protected void BuildOffsetFrame(string     s, Vector2 offset, ConsoleColor color = _notAColor,
                                    FilterSet? filterSet = null) {
       
       var fgColor = (color == _notAColor) ? Console.ForegroundColor : color;
@@ -131,5 +146,6 @@ public class ScreenBuff : IRenderWindow {
 
       Console.ResetColor();
       Console.SetCursorPosition(0, _height);
+      ResetBack();
    }
 }
